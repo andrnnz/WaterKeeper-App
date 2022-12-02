@@ -3,7 +3,7 @@ import { Dots, Line } from '../screens/AreaChartScreen/chartAdds';
 
 export const Barras = ({datos}) => {
     return <BarChart
-    style={{ height: 200, marginVertical: 20 }}
+    style={{ height: 200, marginVertical: 1 }}
     horizontal={true}
     spacingInner={0.1}
     gridMin={0}
