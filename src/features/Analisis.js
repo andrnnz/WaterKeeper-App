@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image} from "react-native";
 
 import { spacing, fontSizes } from "../utils/sizes";
@@ -11,12 +11,11 @@ import { Grafica } from "../components/Grafica";
 import { Barras } from "../components/Barras";
 
 import xd from '../utils/variables';
-import { doc, onSnapshot, getDoc} from "firebase/firestore";
+import { doc, onSnapshot, getDoc, collection} from "firebase/firestore";
 
 const {app,db} = xd;
 
 
-const data1 = [0, 0.2, 0.23, 0.34, 0.5, 0.51, 0.54, 0.6, 0.65, 0.64, 0.71, 0.8, 0.9, 1];
 const data3 = [0.2, 0.4];
 
 const userConverter = {
@@ -31,21 +30,24 @@ const userConverter = {
   }
 };
 
+
 export const Analisis = ({met}) => {
 
   const [gasto, setGasto] = useState(null);
+  //const [data1, setData1] = useState(null);
 
-  const Getdos = () => {
-    const unsub = onSnapshot(doc(db, "vol", "unico"), (doc) => {
-      console.log("Current data: ", doc.data());
-  });
-  }
+  useEffect(()=> onSnapshot(collection(db, "vol"), collection => {
+    setGasto(collection.docs.map(doc => doc.data().volumen));
+    console.log(gasto);
+  }))
 
   const limite = parseInt(met);
   const data2 = [limite];
-
+  const data1 = gasto;
 
   return (
+
+    
     <View style={styles.container}>
       <Logo/>
       <View style={styles.containerMeta}>
@@ -55,7 +57,6 @@ export const Analisis = ({met}) => {
       </View>
       <View style={styles.pro}>
         <Progreso/>
-        <Getdos/>
         <Barras datos={data2}/>
         <View style={styles.contGr}>
           <Text style={styles.tGr}> Flujo vs Sónico: </Text>
@@ -65,7 +66,7 @@ export const Analisis = ({met}) => {
         <View style={styles.contGr}>
           <Text style={styles.tGr}> Volumen promedio: </Text>
         </View>
-        <Grafica datos={data1}/>
+        <Grafica datos={(data1)? data1 : null}/>
         <Image style={styles.imagen} resizeMode='center' source={require('../images/f.jpg')}/>
       </View>
     </View>
