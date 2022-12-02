@@ -17,7 +17,7 @@ export const Analisis = ({met}) => {
         <Text style={styles.subtitle}> {met} </Text>
         <Text style={styles.subtitle}> Lts. </Text>
       </View>
-      <Progreso/>
+      <Progreso lim={met}/>
     </View>
   );
 };
