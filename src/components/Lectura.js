@@ -6,48 +6,44 @@ import xd from '../utils/variables';
 export const Lectura = () => {
     const {app,db} = xd;
 
-  class User {
-    constructor (born, first, last ) {
-        this.born = born;
-        this.first = first;
-        this.last = last;
+  class volumen {
+    constructor (Vol_Flujo, Vol_Sonico) {
+        this.Vol_Flujo = Vol_Flujo;
+        this.Vol_Sonico = Vol_Sonico;
     }
     toString() {
-        return this.born + ', ' + this.first + ', ' + this.last;
+        return 'Sensor de Flujo: ' + this.Vol_Flujo + ', Sensor Sónico: ' + this.Vol_Sonico;
     }
   }
 
   const userConverter = {
     toFirestore: (user) => {
         return {
-            born: user.born,
-            first: user.first,
-            last: user.last
+          Vol_Flujo: user.Vol_Flujo,
+          Vol_Sonico: user.Vol_Sonico,
             };
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
-        return new User(data.born, data.first, data.last);
+        return new volumen(data.Vol_Flujo, data.Vol_Sonico);
     }
 };
 
   useEffect(() => {
     const test = async() =>{
 
-      const usersRef = collection(db, "users");
+      const usersRef = collection(db, "vol");
 
-      await setDoc(doc(usersRef, "SP"), {
-        born: 1989, first: "Sexo", last: "Perez"});
-      await setDoc(doc(usersRef, "AN"), {
-        born: 2002, first: "And", last: "Si"});
+      await setDoc(doc(usersRef, "pruebaf"), {
+        Vol_Flujo: 0.2, Vol_Sonico: "0.21"});
 
       try {
         console.log("entro")
-        const querySnapshot = await getDocs(collection(db, "users"));
+        const querySnapshot = await getDocs(collection(db, "vol"));
         querySnapshot.forEach((doc) => {
           console.log(`${doc.id} => ${doc.data()}`);
         });
-        const ref = doc(db, "users", "SP").withConverter(userConverter);
+        const ref = doc(db, "vol", "pruebaf").withConverter(userConverter);
         const docSnap = await getDoc(ref);
         if (docSnap.exists()) {
           // Convert to City object

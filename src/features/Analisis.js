@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image} from "react-native";
 
 import { spacing, fontSizes } from "../utils/sizes";
@@ -10,12 +10,38 @@ import { Progreso } from "../components/Progreso";
 import { Grafica } from "../components/Grafica";
 import { Barras } from "../components/Barras";
 
+import xd from '../utils/variables';
+import { doc, onSnapshot, getDoc} from "firebase/firestore";
+
+const {app,db} = xd;
+
+
 const data1 = [0, 0.2, 0.23, 0.34, 0.5, 0.51, 0.54, 0.6, 0.65, 0.64, 0.71, 0.8, 0.9, 1];
 const data3 = [0.2, 0.4];
 
-export const Analisis = ({met}) => {
-  const limite = parseInt(met);
+const userConverter = {
+  toFirestore: (user) => {
+      return {
+        volumen: user.volumen,
+          };
+  },
+  fromFirestore: (snapshot, options) => {
+      const data = snapshot.data(options);
+      return (data.volumen);
+  }
+};
 
+export const Analisis = ({met}) => {
+
+  const [gasto, setGasto] = useState(null);
+
+  const Getdos = () => {
+    const unsub = onSnapshot(doc(db, "vol", "unico"), (doc) => {
+      console.log("Current data: ", doc.data());
+  });
+  }
+
+  const limite = parseInt(met);
   const data2 = [limite];
 
 
@@ -29,6 +55,7 @@ export const Analisis = ({met}) => {
       </View>
       <View style={styles.pro}>
         <Progreso/>
+        <Getdos/>
         <Barras datos={data2}/>
         <View style={styles.contGr}>
           <Text style={styles.tGr}> Flujo vs Sónico: </Text>
@@ -53,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   subtitle: {
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
     fontSize: spacing.lg,
     color: colors.blue,
     fontWeight: "bold",
