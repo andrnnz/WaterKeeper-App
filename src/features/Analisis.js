@@ -11,9 +11,14 @@ import { Grafica } from "../components/Grafica";
 import { Barras } from "../components/Barras";
 
 const data1 = [0, 0.2, 0.23, 0.34, 0.5, 0.51, 0.54, 0.6, 0.65, 0.64, 0.71, 0.8, 0.9, 1];
-const data2 = [2, 1];
+const data3 = [0.2, 0.4];
 
 export const Analisis = ({met}) => {
+  const limite = parseInt(met);
+
+  const data2 = [limite];
+
+
   return (
     <View style={styles.container}>
       <Logo/>
@@ -22,12 +27,18 @@ export const Analisis = ({met}) => {
         <Text style={styles.subtitle}> {met} </Text>
         <Text style={styles.subtitle}> Lts. </Text>
       </View>
-      <Image style={styles.imagen} resizeMode='center' source={require('../images/f.jpg')}/>
       <View style={styles.pro}>
         <Progreso/>
-        <Grafica datos={data1}/>
-        <Image style={styles.imagen} resizeMode='center' source={require('../images/f.jpg')}/>
         <Barras datos={data2}/>
+        <View style={styles.contGr}>
+          <Text style={styles.tGr}> Flujo vs Sónico: </Text>
+        </View>
+        <Barras datos={data3}/>
+        <Image style={styles.imagen} resizeMode='center' source={require('../images/f.jpg')}/>
+        <View style={styles.contGr}>
+          <Text style={styles.tGr}> Volumen promedio: </Text>
+        </View>
+        <Grafica datos={data1}/>
         <Image style={styles.imagen} resizeMode='center' source={require('../images/f.jpg')}/>
       </View>
     </View>
@@ -49,10 +60,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   imagen: {
-    height: 30,
+    height: 10,
     alignSelf: "center",
   },
   pro: {
     flexDirection: 'center',
+  },
+  contGr: {
+    flexDirection: "row",
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+  },
+  tGr: {
+    padding: spacing.md,
+    fontSize: spacing.md,
+    color: colors.blue,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
